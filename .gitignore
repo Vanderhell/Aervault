@@ -1,0 +1,5 @@
+/build-default
+/build
+/examples/esp32s3_nvs/build
+/build-asan
+/build-ubsan

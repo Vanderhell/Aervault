@@ -1,0 +1,136 @@
+{
+  "port_before_cut": "COM19",
+  "port_after_reconnect": "COM19",
+  "mac": "3C:0F:02:DE:77:44",
+  "usb_disconnect_observed": true,
+  "power_on_reset_reason": 1,
+  "power_loss_confirmed": true,
+  "batch_incomplete_at_disconnect": true,
+  "last_batch_started": 26,
+  "last_batch_confirmed": 25,
+  "last_confirmed_security_value": 6400,
+  "recovered_security_value": 6643,
+  "security_rollback": false,
+  "post_cut_range": [
+    6401,
+    6401
+  ],
+  "counter_overlap": false,
+  "physical_cut_during_flash_program": "UNVERIFIED",
+  "note": "USB loss and a pending write batch were observed; no external electrical probe measured the exact flash-program interval.",
+  "host_confirmed_counter_ranges": 25,
+  "warm_restarts_during_physical_run": 0,
+  "power_on_reset_reason_expected": true,
+  "previous_ranges": [
+    [
+      1,
+      256
+    ],
+    [
+      257,
+      512
+    ],
+    [
+      513,
+      768
+    ],
+    [
+      769,
+      1024
+    ],
+    [
+      1025,
+      1280
+    ],
+    [
+      1281,
+      1536
+    ],
+    [
+      1537,
+      1792
+    ],
+    [
+      1793,
+      2048
+    ],
+    [
+      2049,
+      2304
+    ],
+    [
+      2305,
+      2560
+    ],
+    [
+      2561,
+      2816
+    ],
+    [
+      2817,
+      3072
+    ],
+    [
+      3073,
+      3328
+    ],
+    [
+      3329,
+      3584
+    ],
+    [
+      3585,
+      3840
+    ],
+    [
+      3841,
+      4096
+    ],
+    [
+      4097,
+      4352
+    ],
+    [
+      4353,
+      4608
+    ],
+    [
+      4609,
+      4864
+    ],
+    [
+      4865,
+      5120
+    ],
+    [
+      5121,
+      5376
+    ],
+    [
+      5377,
+      5632
+    ],
+    [
+      5633,
+      5888
+    ],
+    [
+      5889,
+      6144
+    ],
+    [
+      6145,
+      6400
+    ]
+  ],
+  "counter_object": {
+    "partition": "avtest",
+    "namespace": "avctr",
+    "identity_hex": "C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1",
+    "schema": 1,
+    "policy": "AV_COUNTER"
+  },
+  "persisted_counter_upper_bound_before_first_post_cut_reservation": 6400,
+  "post_cut_range_starts_above_persisted_bound": true,
+  "upper_bound_evidence": "Derived from successful av_reserve return (first = stored upper bound + 1); NVS replace reports success only after nvs_commit. It matches the maximum host-confirmed range end."
+}

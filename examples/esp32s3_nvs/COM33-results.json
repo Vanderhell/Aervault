@@ -1,0 +1,47 @@
+{
+  "port": "COM33",
+  "mac": "3C:0F:02:DE:77:FC",
+  "ranges": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      9,
+      10
+    ]
+  ],
+  "restart_count": 4,
+  "nvs_full_result": "RESERVE,status=5,stage=2,slot=1,esp_err=0x1105,operation=nvs_set_blob",
+  "physical_power_cut": "PASS",
+  "successful_campaigns": 1,
+  "successful_warm_campaigns": 1,
+  "warm_restarts_each_run": 4,
+  "counter_overlap_check": "PASS",
+  "strict_missing_and_corrupt": "PASS",
+  "counter_missing_and_corrupt": "PASS",
+  "failed_reservation_emitted_no_range": "PASS",
+  "test_partition_full": "PASS",
+  "campaign_verdict": "PASS",
+  "physical_power_cut_runs": 1,
+  "physical_cut_during_flash_program": "UNVERIFIED",
+  "post_recovery_counter_verification": {
+    "object": {
+      "partition": "avtest",
+      "namespace": "avctr",
+      "identity_hex": "C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1",
+      "schema": 1,
+      "policy": "AV_COUNTER"
+    },
+    "persisted_upper_bound_before_reservation": 30464,
+    "first_reservation_after_recovery": 30465,
+    "starts_above_persisted_upper_bound": true,
+    "matches_maximum_prior_confirmed_range_end": true,
+    "evidence": "The post-recovery av_reserve returned first=stored_upper_bound+1 after a successful replace; NVS replace succeeds only after nvs_commit. The value also exceeds all host-observed issued ranges.",
+    "maximum_prior_confirmed_range_end": 30464
+  }
+}
