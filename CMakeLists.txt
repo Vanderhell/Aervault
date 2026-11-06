@@ -3,6 +3,7 @@ project(aervault VERSION 0.1.0 LANGUAGES C)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 option(AV_TESTS "Build host fault-injection tests" OFF)
+option(AV_SANITIZERS "Instrument Aervault and host tests with ASan/UBSan" OFF)
 if(POLICY CMP0169)
     cmake_policy(SET CMP0169 OLD)
 endif()
@@ -253,7 +254,7 @@ if(AV_TESTS)
     set_target_properties(aervault_nvs_router_test PROPERTIES
         C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO)
     add_test(NAME aervault_nvs_router COMMAND aervault_nvs_router_test)
-    if(NOT CMAKE_C_FLAGS MATCHES "sanitize")
+    if(NOT AV_SANITIZERS AND NOT CMAKE_C_FLAGS MATCHES "sanitize")
         add_test(NAME aervault_install_package
             COMMAND ${CMAKE_COMMAND}
                 -DAERVAULT_BUILD_DIR=${CMAKE_BINARY_DIR}
@@ -320,5 +321,36 @@ if(AV_TESTS)
         if(TARGET ${_av_check})
             add_test(NAME ${_av_check} COMMAND ${_av_check})
         endif()
+    endforeach()
+endif()
+
+if(AV_SANITIZERS)
+    if(NOT CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+        message(FATAL_ERROR "AV_SANITIZERS requires GCC or Clang")
+    endif()
+    function(av_instrument_target target)
+        if(TARGET ${target})
+            get_target_property(_av_type ${target} TYPE)
+            if(_av_type STREQUAL "EXECUTABLE")
+                target_compile_options(${target} PRIVATE
+                    -fsanitize=address,undefined -fno-omit-frame-pointer)
+                target_link_options(${target} PRIVATE -fsanitize=address,undefined)
+            elseif(_av_type STREQUAL "STATIC_LIBRARY")
+                target_compile_options(${target} PRIVATE
+                    -fsanitize=address,undefined -fno-omit-frame-pointer)
+            endif()
+        endif()
+    endfunction()
+    foreach(_av_sanitized_target
+            aervault_core aervault_counter aervault_auth aervault_seal aervault_pair
+            aervault_journal aervault_wal aervault_queue aervault_history
+            aervault_budget aervault_diag aervault_nor aervault_ram_test
+            aervault_test aervault_nvs_router_test aervault_crypto_test
+            aervault_storage_test aervault_campaign aervault_module_faults
+            aervault_link_core aervault_link_counter aervault_link_auth
+            aervault_link_seal aervault_link_pair aervault_link_journal
+            aervault_link_wal aervault_link_queue aervault_link_history
+            aervault_link_budget aervault_link_diag aervault_link_nor)
+        av_instrument_target(${_av_sanitized_target})
     endforeach()
 endif()

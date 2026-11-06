@@ -28,11 +28,9 @@ jobs:
       matrix:
         include:
           - sanitizers: none
-            c_flags: ""
-            linker_flags: ""
+            enabled: "OFF"
           - sanitizers: address-undefined
-            c_flags: -fsanitize=address,undefined -fno-omit-frame-pointer
-            linker_flags: -fsanitize=address,undefined
+            enabled: "ON"
     env:
       ASAN_OPTIONS: detect_leaks=1
     steps:
@@ -44,8 +42,7 @@ jobs:
           -DAV_PAIR_X25519=ON -DAV_ENABLE_NOR=ON -DAV_ENABLE_JOURNAL=ON
           -DAV_ENABLE_WAL=ON -DAV_ENABLE_QUEUE=ON -DAV_ENABLE_HISTORY=ON
           -DAV_ENABLE_BUDGET=ON -DAV_ENABLE_DIAG=ON
-          -DCMAKE_C_FLAGS="${{ matrix.c_flags }}"
-          -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.linker_flags }}"
+          -DAV_SANITIZERS=${{ matrix.enabled }}
       - name: Build
         run: cmake --build build-full
       - name: Test

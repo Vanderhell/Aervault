@@ -49,8 +49,9 @@ ctest --test-dir build-full --output-on-failure
 ```
 
 This suite includes known crypto vectors, storage fault regressions, a seeded
-10,000-run host campaign, and linker checks. Run the same CTest suite in
-separate ASan and UBSan build directories for sanitizer coverage. The
+10,000-run host campaign, and linker checks. Configure a separate build with
+`-DAV_SANITIZERS=ON` to instrument Aervault sources and host tests under
+ASan/UBSan without changing compiler flags for fetched dependencies. The
 fault-injection RAM/NOR simulators are host test backends, not evidence of
 physical power-loss timing.
 
