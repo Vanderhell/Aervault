@@ -1,0 +1,52 @@
+name: Host validation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core-only:
+    name: Core-only link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build-core -G Ninja -DAV_TESTS=OFF
+      - name: Build
+        run: |
+          cmake --build build-core --target aervault_core
+          cmake --build build-core --target aervault_link_core
+      - name: Run core-only link check
+        run: ./build-core/aervault_link_core
+
+  complete:
+    name: Complete host suite (${{ matrix.sanitizers }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - sanitizers: none
+            c_flags: ""
+            linker_flags: ""
+          - sanitizers: address-undefined
+            c_flags: -fsanitize=address,undefined -fno-omit-frame-pointer
+            linker_flags: -fsanitize=address,undefined
+    env:
+      ASAN_OPTIONS: detect_leaks=1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure all optional modules
+        run: >-
+          cmake -S . -B build-full -G Ninja -DAV_TESTS=ON
+          -DAV_ENABLE_AUTH=ON -DAV_ENABLE_SEAL=ON -DAV_ENABLE_PAIR=ON
+          -DAV_PAIR_X25519=ON -DAV_ENABLE_NOR=ON -DAV_ENABLE_JOURNAL=ON
+          -DAV_ENABLE_WAL=ON -DAV_ENABLE_QUEUE=ON -DAV_ENABLE_HISTORY=ON
+          -DAV_ENABLE_BUDGET=ON -DAV_ENABLE_DIAG=ON
+          -DCMAKE_C_FLAGS="${{ matrix.c_flags }}"
+          -DCMAKE_EXE_LINKER_FLAGS="${{ matrix.linker_flags }}"
+      - name: Build
+        run: cmake --build build-full
+      - name: Test
+        run: ctest --test-dir build-full --output-on-failure

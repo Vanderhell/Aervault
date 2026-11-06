@@ -1,5 +1,9 @@
 /build-default
 /build
+/build-core
+/build-full
+/build-sanitize
+/install
 /examples/esp32s3_nvs/build
 /examples/esp32s3_crypto/build
 /examples/esp32s3_crypto/build-crypto-size

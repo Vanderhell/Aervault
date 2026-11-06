@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(aervault LANGUAGES C)
+project(aervault VERSION 0.1.0 LANGUAGES C)
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 option(AV_TESTS "Build host fault-injection tests" OFF)
 if(POLICY CMP0169)
     cmake_policy(SET CMP0169 OLD)
@@ -8,12 +10,47 @@ add_library(aervault_core STATIC src/aervault.c)
 add_library(aervault::core ALIAS aervault_core)
 add_library(aervault_counter STATIC src/counter.c)
 add_library(aervault::counter ALIAS aervault_counter)
-target_include_directories(aervault_core PUBLIC include PRIVATE src)
-target_include_directories(aervault_counter PUBLIC include PRIVATE src)
+target_include_directories(aervault_core
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    PRIVATE src)
+target_include_directories(aervault_counter
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    PRIVATE src)
 target_link_libraries(aervault_counter PUBLIC aervault_core)
 add_library(aervault INTERFACE)
 target_link_libraries(aervault INTERFACE aervault_core aervault_counter)
-set_target_properties(aervault_core aervault_counter PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO)
+set_target_properties(aervault_core PROPERTIES
+    C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO EXPORT_NAME core)
+set_target_properties(aervault_counter PROPERTIES
+    C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO EXPORT_NAME counter)
+set_target_properties(aervault PROPERTIES EXPORT_NAME aervault)
+
+install(TARGETS aervault_core aervault_counter aervault
+    EXPORT aervaultTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES include/aervault.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES LICENSE NOTICE
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/aervault)
+install(EXPORT aervaultTargets
+    FILE aervaultTargets.cmake
+    NAMESPACE aervault::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/aervault)
+configure_package_config_file(cmake/aervaultConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/aervaultConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/aervault)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/aervaultConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/aervaultConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/aervaultConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/aervault)
 
 # Optional adapters are intentionally not part of core/counter. Supply installed
 # CMake package targets from the application/toolchain when enabling them.
@@ -216,6 +253,25 @@ if(AV_TESTS)
     set_target_properties(aervault_nvs_router_test PROPERTIES
         C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO)
     add_test(NAME aervault_nvs_router COMMAND aervault_nvs_router_test)
+    if(NOT CMAKE_C_FLAGS MATCHES "sanitize")
+        add_test(NAME aervault_install_package
+            COMMAND ${CMAKE_COMMAND}
+                -DAERVAULT_BUILD_DIR=${CMAKE_BINARY_DIR}
+                -DAERVAULT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                -DAERVAULT_TEST_ROOT=${CMAKE_CURRENT_BINARY_DIR}/install-smoke
+                -DAERVAULT_INSTALL_DATADIR=${CMAKE_INSTALL_DATADIR}
+                -DAERVAULT_GENERATOR=${CMAKE_GENERATOR}
+                -DAERVAULT_GENERATOR_PLATFORM=${CMAKE_GENERATOR_PLATFORM}
+                -DAERVAULT_GENERATOR_TOOLSET=${CMAKE_GENERATOR_TOOLSET}
+                -DAERVAULT_C_COMPILER=${CMAKE_C_COMPILER}
+                -DAERVAULT_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                -DAERVAULT_C_STANDARD_LIBRARIES=${CMAKE_C_STANDARD_LIBRARIES}
+                -DAERVAULT_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}
+                -DAERVAULT_C_FLAGS_MINSIZEREL=${CMAKE_C_FLAGS_MINSIZEREL}
+                -DAERVAULT_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}
+                -DAERVAULT_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}
+                -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/install_package.cmake)
+    endif()
 
     if(AV_ENABLE_AUTH AND AV_ENABLE_SEAL AND AV_ENABLE_PAIR)
         add_executable(aervault_crypto_test tests/crypto.c)

@@ -54,6 +54,21 @@ separate ASan and UBSan build directories for sanitizer coverage. The
 fault-injection RAM/NOR simulators are host test backends, not evidence of
 physical power-loss timing.
 
+Install the core and counter package:
+
+```sh
+cmake --install build --prefix install
+```
+
+Consumer projects can then use `find_package(aervault 0.1 CONFIG REQUIRED)`
+and link `aervault::core`, `aervault::counter`, or `aervault::aervault`. The
+installed package currently exports the core and counter targets; optional
+adapters are built from source with their corresponding `AV_ENABLE_*` options.
+
+GitHub Actions runs a core-only build and the complete host suite in normal
+and ASan/UBSan configurations. The host suite also smoke-tests the installed
+core-only and counter package targets.
+
 ## ESP32-S3 validation
 
 `examples/esp32s3_nvs` builds an ESP-IDF test firmware with isolated `avtest`
