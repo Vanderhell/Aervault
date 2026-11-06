@@ -285,3 +285,24 @@ av_status av_get(av_context *context, uint32_t id,
                    value, capacity, length, e);
 }
 
+av_status av_get_revision(av_context *context, uint32_t id,
+                          uint64_t *revision, av_error *e)
+{
+    av_context_binding binding;
+    av_object object;
+    av_slot slots[2];
+    unsigned active=0;
+    av_status status;
+    size_t cap;
+    clear_error(e);
+    if (!revision) return AV_INVALID;
+    status=av_internal_context_object(context,id,&binding,&object);
+    if (status!=AV_OK) return status;
+    cap=AV_OVERHEAD+object.payload_limit;
+    status=av_internal_scan(&object,context->_work,cap,slots,&active,e);
+    if (status==AV_MISSING&&object.policy==AV_STRICT) return AV_BLOCKED;
+    if (status!=AV_OK) return status;
+    *revision=slots[active].revision;
+    return AV_OK;
+}
+

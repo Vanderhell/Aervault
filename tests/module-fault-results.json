@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "queue_cases": 54,
+  "history_cases": 90,
+  "diagnostic_cases": 55,
+  "nor_adapter_cases": 54,
+  "total_cases": 253,
+  "fault_modes": ["fail before mutation","partial durable operation","complete durable operation with error"],
+  "reset": "fresh public handles and cleared work buffers from preserved bytes"
+}

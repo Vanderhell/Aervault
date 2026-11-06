@@ -1,0 +1,5 @@
+menu "Aervault hardware campaign"
+config AV_FOOTPRINT_SEAL
+    bool "Enable AES-GCM for seal campaign"
+    default y
+endmenu

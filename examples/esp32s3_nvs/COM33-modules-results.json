@@ -1,0 +1,21 @@
+{
+  "port": "COM33",
+  "mac": "3C:0F:02:DE:77:FC",
+  "runs": 1,
+  "warm_restarts": 1,
+  "partition": "avraw",
+  "modules_test": "PASS",
+  "recovery": "PASS",
+  "recovered_state": {
+    "wal": [
+      11,
+      21
+    ],
+    "pending_queue_items": 1,
+    "history_objects": 2,
+    "latest_diagnostic_event": 3
+  },
+  "budget_refusal": "PASS: rejected at programming limit with no NOR count or journal-space change",
+  "physical_power_cut": "NOT_RUN",
+  "exact_flash_program_interruption": "UNVERIFIED"
+}

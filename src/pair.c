@@ -1,6 +1,9 @@
 #include "aervault_pair.h"
 #include "mcrypt.h"
 #include <string.h>
+#if defined(AV_PAIR_HAS_X25519)
+#include "mdh.h"
+#endif
 static int hmac(const uint8_t *k,size_t kn,const void *d,size_t n,uint8_t out[32])
 { return mcrypt_hmac_sha256(k,kn,d,n,out)==MCRYPT_OK?0:-1; }
 /* RFC5869 HKDF-SHA256, using only microcrypt's public HMAC primitive. */
@@ -16,13 +19,17 @@ static int hkdf(const uint8_t *ikm,size_t in,const void *salt,size_t sn,
     mcrypt_secure_clear(prk,32); mcrypt_secure_clear(buf,sizeof buf); return 0;
 }
 int av_pair_derive(const void *secret,size_t secret_len,const void *salt,size_t salt_len,
-                   const uint8_t local[16],const uint8_t peer[16],int verified,
+                   const uint8_t local[16],const uint8_t peer[16],const uint8_t peer_public[32],
+                   av_pair_identity_verify_fn verify_peer,void *verify_ctx,
                    int initiator,av_pair_keys *keys)
 {
     static const uint8_t domain[]="Aervault MCU pair v1";
     uint8_t info[64]; size_t p=0;
-    if(!secret||!secret_len||!local||!peer||!keys||!verified||(!salt&&salt_len)) return -1;
+    if(!keys) return -1;
+    mcrypt_secure_clear(keys,sizeof *keys);
+    if(!secret||!secret_len||!local||!peer||!peer_public||!verify_peer||(!salt&&salt_len)) return -1;
     if(memcmp(local,peer,16)==0) return -1;
+    if(verify_peer(verify_ctx,peer,peer_public)!=0) return -1;
     memcpy(info+p,domain,sizeof domain-1); p+=sizeof domain-1;
     if(initiator) { memcpy(info+p,local,16); memcpy(info+p+16,peer,16); }
     else { memcpy(info+p,peer,16); memcpy(info+p+16,local,16); }
@@ -38,3 +45,24 @@ int av_pair_derive(const void *secret,size_t secret_len,const void *salt,size_t 
     mcrypt_secure_clear(info,sizeof info);
     return 0;
 }
+#if defined(AV_PAIR_HAS_X25519)
+int av_pair_x25519(const uint8_t local_private[32],const uint8_t local[16],
+                   const uint8_t peer[16],const uint8_t peer_public[32],
+                   av_pair_identity_verify_fn verify_peer,void *verify_ctx,
+                   const void *salt,size_t salt_len,int initiator,av_pair_keys *keys)
+{
+    uint8_t shared[32]; int result;
+    if(!keys) return -1;
+    mcrypt_secure_clear(keys,sizeof *keys);
+    if(!local_private||!local||!peer||!peer_public||!verify_peer||
+       (!salt&&salt_len)||memcmp(local,peer,16)==0) return -1;
+    if(verify_peer(verify_ctx,peer,peer_public)!=0) return -1;
+    if(mdh_shared_secret_checked(shared,local_private,peer_public)!=MDH_OK) {
+        mcrypt_secure_clear(keys,sizeof *keys); return -1;
+    }
+    result=av_pair_derive(shared,sizeof shared,salt,salt_len,local,peer,peer_public,
+                          verify_peer,verify_ctx,initiator,keys);
+    mdh_secret_clear(shared);
+    return result;
+}
+#endif

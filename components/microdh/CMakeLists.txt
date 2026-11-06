@@ -1,0 +1,21 @@
+include(FetchContent)
+set(AV_MICRODH_SOURCE_DIR "" CACHE PATH "Existing pinned microdh source checkout")
+if(DEFINED ENV{AV_MICRODH_SOURCE_DIR})
+    set(AV_MICRODH_SOURCE_DIR "$ENV{AV_MICRODH_SOURCE_DIR}")
+endif()
+if(AV_MICRODH_SOURCE_DIR)
+    set(_av_microdh_src "${AV_MICRODH_SOURCE_DIR}")
+else()
+    FetchContent_Declare(av_microdh_src
+        GIT_REPOSITORY https://github.com/Vanderhell/microdh.git
+        GIT_TAG e2b16dee4cdc6888608b6146a67cdf43d36f65ab)
+    FetchContent_GetProperties(av_microdh_src)
+    if(NOT av_microdh_src_POPULATED)
+        FetchContent_Populate(av_microdh_src)
+    endif()
+    set(_av_microdh_src "${av_microdh_src_SOURCE_DIR}")
+endif()
+file(TO_CMAKE_PATH "${_av_microdh_src}" _av_microdh_src_norm)
+idf_component_register(SRCS "${_av_microdh_src_norm}/src/mdh.c"
+                       INCLUDE_DIRS "${_av_microdh_src_norm}/include")
+target_compile_features(${COMPONENT_LIB} PUBLIC c_std_99)

@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.16)
+set(AV_FOOTPRINT_VARIANT core)
+include("${CMAKE_CURRENT_LIST_DIR}/../../idf_project.cmake")
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(aervault_crypto_footprint)

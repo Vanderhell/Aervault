@@ -1,0 +1,51 @@
+{
+  "boards": {
+    "3C:0F:02:DE:77:44": {
+      "port": "COM19",
+      "nor_test": "PASS",
+      "nor_bank_recovery_after_warm_restart": "PASS",
+      "seal_store_and_read_after_warm_restart": "PASS",
+      "seal_nonce_before_restart": "a1e101010000000000000009",
+      "seal_nonce_after_restart": "a1e10101000000000000000a",
+      "seal_nonce_unique": true,
+      "tampered_seal_plaintext_blocked": true,
+      "boot_after_nor": "READY,chip=ESP32-S3,mac=3C:0F:02:DE:77:44,partition=avtest,ns=avctr+avsec,reset_reason=3",
+      "stack_metrics": {
+        "stack_high_water_bytes": "956",
+        "stack_free_at_boot_bytes": "1948",
+        "stack_config_bytes": "3584"
+      }
+    },
+    "3C:0F:02:DE:77:FC": {
+      "port": "COM33",
+      "nor_test": "PASS",
+      "nor_bank_recovery_after_warm_restart": "PASS",
+      "seal_store_and_read_after_warm_restart": "PASS",
+      "seal_nonce_before_restart": "a1e101010000000000000003",
+      "seal_nonce_after_restart": "a1e101010000000000000004",
+      "seal_nonce_unique": true,
+      "tampered_seal_plaintext_blocked": true,
+      "boot_after_nor": "READY,chip=ESP32-S3,mac=3C:0F:02:DE:77:FC,partition=avtest,ns=avctr+avsec,reset_reason=3",
+      "stack_metrics": {
+        "stack_high_water_bytes": "956",
+        "stack_free_at_boot_bytes": "1948",
+        "stack_config_bytes": "3584"
+      }
+    }
+  },
+  "pair": {
+    "PSK": {
+      "directional_keys_match": true,
+      "foreign_identity_rejected_on_both": true
+    },
+    "X25519": {
+      "directional_keys_match": true,
+      "foreign_identity_rejected_on_both": true
+    },
+    "message_relay": {
+      "valid_message": "PASS",
+      "tampered_message": "REJECTED_NO_PLAINTEXT"
+    }
+  },
+  "transport": "host serial relay"
+}

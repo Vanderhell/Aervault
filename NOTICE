@@ -1,0 +1,51 @@
+Aervault
+
+Copyright 2026 Vanderhell
+
+Aervault is licensed under the Apache License, Version 2.0. See LICENSE.
+
+The following Aervault adapters and storage mechanisms are based on source
+mechanisms from the listed MIT-licensed Vanderhell projects. Adapted Aervault
+code is licensed under Apache-2.0; the notices and MIT terms below are retained
+for attribution of those upstream mechanisms.
+
+- microflash, revision 7730387307451db9c86c42e9681263f135949cce
+- loxdust, revision 975cb56388b5a466a7a4056fdab654d299984aee
+- loxdb, revision f373bb499ae6f6ff6c2b5cd38b59e237a56c612a
+- iotspool, revision 0baab5f867f83cb3d31bad3057c1c1cb658b9b86
+- nvlog, revision c6d5e7566d31ca13b30d22851e67e606d7cf0860
+- loxbudget, revision 584351686f0b97549a09a055d15bf2aca262d046
+- panicdump, revision a7808dbd8b2e8e3039c80d687e9684ef13f4a43f
+
+Builds with optional `aervault::auth`, `aervault::seal`, `aervault::pair`, or
+`aervault::nor` fetch the following unmodified libraries at pinned revisions:
+
+- microcrypt, revision a492e7ea36d77bb7ab89ee9b4c1dfc8c4d017124 (MIT)
+- microdh, revision e2b16dee4cdc6888608b6146a67cdf43d36f65ab (MIT)
+- microflash, revision 7730387307451db9c86c42e9681263f135949cce (MIT)
+
+Upstream copyright notices:
+
+Copyright (c) 2025 Vanderhell (microdh)
+Copyright (c) 2026 Vanderhell (microcrypt, microflash, and storage mechanisms)
+MIT License
+
+Copyright (c) 2026 Vanderhell
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

@@ -97,6 +97,8 @@ av_status av_open(av_context *, const av_config *);
 av_status av_provision_id(av_context *, uint32_t, const void *, size_t, av_error *);
 av_status av_put(av_context *, uint32_t, const void *, size_t, av_error *);
 av_status av_get(av_context *, uint32_t, void *, size_t, size_t *, av_error *);
+/* Return the revision of the authenticated AV01 value selected by recovery. */
+av_status av_get_revision(av_context *, uint32_t, uint64_t *, av_error *);
 /* Defined by the optional aervault::counter target. */
 av_status av_counter_next(av_context *, uint32_t, uint64_t *, av_error *);
 #endif

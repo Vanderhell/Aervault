@@ -1,0 +1,20 @@
+{
+  "port": "COM19",
+  "mac": "3C:0F:02:DE:77:44",
+  "runs": 1,
+  "nor_test": "PASS",
+  "nor_bank_recovery_after_warm_restart": "PASS",
+  "seal_store_and_read_after_warm_restart": "PASS",
+  "tampered_seal_plaintext_blocked": true,
+  "nonces": [
+    "a1e101010000000000000005",
+    "a1e101010000000000000006"
+  ],
+  "nonce_unique": true,
+  "stack_metrics": {
+    "stack_high_water_bytes": "956",
+    "stack_free_at_boot_bytes": "1948",
+    "stack_config_bytes": "3584"
+  },
+  "pairing": "NOT RUN: the peer board is not part of single-board mode"
+}

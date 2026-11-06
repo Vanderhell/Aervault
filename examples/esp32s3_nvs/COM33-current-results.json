@@ -1,0 +1,21 @@
+{
+  "port": "COM33",
+  "mac": "3C:0F:02:DE:77:FC",
+  "ranges": [
+    [
+      1,
+      3
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      9,
+      10
+    ]
+  ],
+  "restart_count": 4,
+  "nvs_full_result": "RESERVE,status=5,stage=2,slot=1,esp_err=0x1105,operation=nvs_set_blob",
+  "physical_power_cut": "UNVERIFIED"
+}

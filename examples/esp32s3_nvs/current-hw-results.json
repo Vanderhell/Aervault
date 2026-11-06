@@ -1,0 +1,185 @@
+{
+  "overall_hw_validation": "PARTIAL",
+  "unverified_scenarios": [
+    "Exact interruption during the NOR/NVS flash program interval; the physical supply loss occurred during an active write batch, but no external probe observed the flash program pins.",
+    "Exact interruption during the NOR/NVS flash program interval; no external probe observed the flash program pins."
+  ],
+  "firmware": {
+    "target": "ESP32-S3",
+    "idf": "5.5.1",
+    "image_bytes": 294160,
+    "static_data_bss_bytes": 15712,
+    "configured_main_stack_bytes": 3584,
+    "measured_runtime_stack_high_water_free_bytes": 956,
+    "derived_max_stack_used_bytes": 2628,
+    "boot_stack_high_water_free_bytes": {
+      "COM19": 1948,
+      "COM33": 1948
+    },
+    "partitions": {
+      "avtest": {
+        "offset": "0x500000",
+        "size_bytes": 131072,
+        "type": "NVS"
+      },
+      "avraw": {
+        "offset": "0x520000",
+        "size_bytes": 262144,
+        "type": "raw NOR test partition"
+      }
+    }
+  },
+  "run_counts": {
+    "baseline_nvs_campaign": {
+      "COM19": 1,
+      "COM33": 1
+    },
+    "extended_nor_seal_campaigns_passed": {
+      "COM19": 2,
+      "COM33": 1
+    },
+    "inter_board_pair_campaigns_passed": 1,
+    "physical_unplug_runs_on_extended_firmware": {
+      "COM19": 1,
+      "COM33": 1
+    },
+    "warm_restarts_in_each_baseline_nvs_campaign": 4,
+    "avraw_module_campaigns": {
+      "COM19": 1,
+      "COM33": 1
+    },
+    "avraw_module_warm_restarts": {
+      "COM19": 1,
+      "COM33": 1
+    }
+  },
+  "boards": {
+    "COM19": {
+      "mac": "3C:0F:02:DE:77:44",
+      "warm_campaign_runs": 1,
+      "warm_restarts": 4,
+      "issued_ranges": [
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          9,
+          10
+        ]
+      ],
+      "range_overlap": false,
+      "full_nvs_write_rejected": true,
+      "native_error": "0x1105",
+      "physical_unplug": {
+        "status": "PASS",
+        "runs_on_extended_firmware": 1,
+        "usb_disconnect_observed": true,
+        "power_on_reset_reason": 1,
+        "last_batch_started": 20,
+        "last_batch_confirmed": 19,
+        "security_value_before_cut": 4864,
+        "recovered_security_value": 5051,
+        "security_rollback": false,
+        "confirmed_counter_ranges": 19,
+        "last_confirmed_range": [
+          4609,
+          4864
+        ],
+        "persisted_counter_upper_bound": 4864,
+        "first_post_cut_range": [
+          4865,
+          4865
+        ],
+        "counter_overlap": false
+      },
+      "power_cut_during_flash_program": "UNVERIFIED; the USB loss interrupted an active write batch, but the exact flash-program interval was not instrumented.",
+      "avraw_module_campaign": "PASS",
+      "avraw_module_recovery": "PASS after one warm restart",
+      "avraw_module_recovered_state": {
+        "wal": [
+          11,
+          21
+        ],
+        "pending_queue_items": 1,
+        "history_objects": 2,
+        "latest_diagnostic_event": 3
+      }
+    },
+    "COM33": {
+      "mac": "3C:0F:02:DE:77:FC",
+      "warm_campaign_runs": 1,
+      "warm_restarts": 4,
+      "issued_ranges": [
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          9,
+          10
+        ]
+      ],
+      "range_overlap": false,
+      "full_nvs_write_rejected": true,
+      "native_error": "0x1105",
+      "physical_unplug": {
+        "status": "PASS",
+        "runs_on_extended_firmware": 1,
+        "usb_disconnect_observed": true,
+        "power_on_reset_reason": 1,
+        "last_batch_started": 9,
+        "last_batch_confirmed": 8,
+        "security_value_before_cut": 2048,
+        "recovered_security_value": 2116,
+        "security_rollback": false,
+        "confirmed_counter_ranges": 8,
+        "last_confirmed_range": [
+          1793,
+          2048
+        ],
+        "persisted_counter_upper_bound": 2048,
+        "first_post_cut_range": [
+          2049,
+          2049
+        ],
+        "counter_overlap": false
+      },
+      "power_cut_during_flash_program": "UNVERIFIED; active write batch interrupted, exact flash-program interval not externally instrumented",
+      "avraw_module_campaign": "PASS",
+      "avraw_module_recovery": "PASS after one warm restart",
+      "avraw_module_recovered_state": {
+        "wal": [
+          11,
+          21
+        ],
+        "pending_queue_items": 1,
+        "history_objects": 2,
+        "latest_diagnostic_event": 3
+      }
+    }
+  },
+  "module_status": {
+    "core_counter_nvs": "PASS on both boards: fresh isolated NVS campaign, strict provisioning, damaged/missing slot cases, counter persistence, four warm restarts and full-NVS error propagation. Both boards also passed one physical unplug/recovery run on the extended firmware.",
+    "nor_adapter_and_bank_switch": "PASS on both boards: avraw NOR adapter, bank compaction/switch, and recovery after warm restart; one paired local campaign per board.",
+    "wal_queue_history_diagnostics_budget": "PASS on COM19 and COM33: avraw campaign plus warm-restart recovery; WAL atomic two-object update, ACKed/pending queue recovery, two-object history retention, diagnostics retention and budget refusal with unchanged program/erase counts and journal free space.",
+    "pair_psk_x25519_and_seal": "PASS: PSK and X25519 directional keys matched across the two MCUs; both rejected a foreign identity; valid peer message passed and tampered message yielded no plaintext. Seal restart recovery, tampered ciphertext rejection and nonce uniqueness passed on both boards.",
+    "stack_peak": "Measured by runtime FreeRTOS high-water mark on both boards: 956 bytes free from a 3584-byte main-task stack, corresponding to 2628 bytes maximum used.",
+    "physical_power_loss": "PASS on both boards on the extended firmware; reset reason POWERON and preserved flash confirmed.",
+    "flash_program_interval": "UNVERIFIED; no probe confirmed interruption during active flash programming."
+  },
+  "host": {
+    "ctest": "PASS, 13/13",
+    "fault_matrix": "PASS, 253 cases (recorded host matrix)",
+    "random_campaign": "PASS, 10000 deterministic seeded host runs (recorded host campaign)",
+    "asan_ubsan": "PASS, 13/13 in build/sanitize after the example-only edits (no source rebuild required)."
+  }
+}

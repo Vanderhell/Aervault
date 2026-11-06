@@ -596,6 +596,12 @@ CONFIG_PARTITION_TABLE_MD5=y
 # end of Partition Table
 
 #
+# Aervault hardware campaign
+#
+CONFIG_AV_FOOTPRINT_SEAL=y
+# end of Aervault hardware campaign
+
+#
 # Compiler options
 #
 CONFIG_COMPILER_OPTIMIZATION_DEBUG=y

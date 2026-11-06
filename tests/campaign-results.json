@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "seed_start": 2654435769,
+  "random_runs": 10000,
+  "format_operation_points": 7,
+  "append_operation_points": 4,
+  "compaction_operation_points": 10,
+  "fault_cases": 84,
+  "module_combinations_queue_diag_budget": [1239,1229,1238,1237,1302,1261,1264,1230],
+  "models": ["pre-operation failure", "partial operation", "error after durable operation"],
+  "note": "host test; no hardware or physical power-cut validation"
+}

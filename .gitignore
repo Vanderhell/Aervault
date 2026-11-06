@@ -1,5 +1,11 @@
 /build-default
 /build
 /examples/esp32s3_nvs/build
+/examples/esp32s3_crypto/build
+/examples/esp32s3_crypto/build-crypto-size
+/examples/esp32s3_crypto/build-crypto-size-v2
+/examples/esp32s3_crypto/build-crypto-size-v3
+/examples/esp32s3_crypto/build-crypto-size-v4
 /build-asan
 /build-ubsan
+/tests/__pycache__/

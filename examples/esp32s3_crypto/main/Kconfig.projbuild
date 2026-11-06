@@ -1,0 +1,11 @@
+menu "Aervault crypto footprint selection"
+config AV_FOOTPRINT_AUTH
+    bool "Include auth adapter"
+    default n
+config AV_FOOTPRINT_SEAL
+    bool "Include seal adapter and counter"
+    default n
+config AV_FOOTPRINT_PAIR
+    bool "Include pair adapter"
+    default n
+endmenu

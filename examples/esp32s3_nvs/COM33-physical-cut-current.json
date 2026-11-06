@@ -1,0 +1,64 @@
+{
+  "port_before_cut": "COM33",
+  "port_after_reconnect": "COM33",
+  "mac": "3C:0F:02:DE:77:FC",
+  "usb_disconnect_observed": true,
+  "power_on_reset_reason": 1,
+  "power_loss_confirmed": true,
+  "batch_incomplete_at_disconnect": true,
+  "last_batch_started": 9,
+  "last_batch_confirmed": 8,
+  "last_confirmed_security_value": 2048,
+  "recovered_security_value": 2116,
+  "security_rollback": false,
+  "previous_ranges": [
+    [
+      1,
+      256
+    ],
+    [
+      257,
+      512
+    ],
+    [
+      513,
+      768
+    ],
+    [
+      769,
+      1024
+    ],
+    [
+      1025,
+      1280
+    ],
+    [
+      1281,
+      1536
+    ],
+    [
+      1537,
+      1792
+    ],
+    [
+      1793,
+      2048
+    ]
+  ],
+  "counter_object": {
+    "partition": "avtest",
+    "namespace": "avctr",
+    "identity_hex": "C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1C1",
+    "schema": 1,
+    "policy": "AV_COUNTER"
+  },
+  "persisted_counter_upper_bound_before_first_post_cut_reservation": 2048,
+  "post_cut_range": [
+    2049,
+    2049
+  ],
+  "post_cut_range_starts_above_persisted_bound": true,
+  "counter_overlap": false,
+  "physical_cut_during_flash_program": "UNVERIFIED",
+  "note": "USB loss and a pending write batch were observed; no external electrical probe measured the exact flash-program interval."
+}

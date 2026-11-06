@@ -194,6 +194,9 @@ def run(args):
         s.close()
         raise AssertionError(f"confirmed security state rolled back {confirmed_value}->{recovered_value}")
     previous_end = ranges[-1][1] if ranges else None
+    if args.previous_end is not None:
+        previous_end = max(previous_end if previous_end is not None else 0,
+                           args.previous_end)
     recovered_range = check_next_range(s, previous_end)
     s.close()
 
@@ -236,6 +239,8 @@ def main():
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--batches", type=int, default=100000)
     p.add_argument("--reconnect-timeout", type=int, default=300)
+    p.add_argument("--previous-end", type=int, default=None,
+                   help="highest range end already issued before this campaign")
     run(p.parse_args())
 
 

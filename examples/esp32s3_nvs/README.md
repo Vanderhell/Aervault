@@ -1,34 +1,38 @@
-﻿# ESP32-S3 NVS adapter test
+# ESP32-S3 storage and crypto test firmware
 
-Build with ESP-IDF 5.5.1 from this directory:
+Test-only ESP-IDF 5.5.1 application for the NVS backend, NOR adapter, crypto
+adapters and journal modules. It uses the isolated `avtest` NVS partition and
+`avraw` raw flash partition. **Campaign commands erase or format test data in
+these partitions. Do not use this partition table on devices with valuable
+data.**
+
+From this directory, with ESP-IDF exported:
 
 ```powershell
-. C:\Espressif\frameworks\esp-idf-v5.5.1\export.ps1
 idf.py build
+idf.py -p COM19 app-flash
 ```
 
-The `aervault_core`, `aervault_counter`, and `aervault_nvs` components are
-separate. NVS namespaces are exclusive to one AV object. The firmware uses a
-test-only tag; it is not cryptographic and must not protect product data.
+The default CMake components fetch microflash, microcrypt and microdh from the
+pinned commits in their component files. Set `AV_MICROFLASH_SOURCE_DIR`,
+`AV_MICROCRYPT_SOURCE_DIR` or `AV_MICRODH_SOURCE_DIR` to existing checkouts at
+those exact commits to build offline.
 
-`partitions.csv` preserves COM19's original partition offsets and sizes and
-adds a factory test app plus isolated 128 KiB `avtest` NVS. COM19's original
-boot metadata and unused flash range are saved under `build/` before staging
-and restored after the physical test. COM33 requires the user-authorized full
-erase before this 16 MiB test layout is installed.
-
-Run the warm-reset campaign from the repository root; the harness validates
-the MAC and checks all emitted counter ranges for overlap:
+From the repository root, run the focused hardware campaign for WAL, queue,
+history, diagnostics and budget:
 
 ```powershell
-python tests/hw_campaign.py --port COM19 `
-  --expect-mac 3C:0F:02:DE:77:44 --output examples/esp32s3_nvs/COM19-results.json
+python tests/hw_modules_campaign.py --port COM19 `
+  --expect-mac 3C:0F:02:DE:77:44 `
+  --output examples/esp32s3_nvs/COM19-modules-results.json
 ```
 
-For the physical power-cut phase, erase only `avtest`, flash the updated app,
-then run `tests/hw_power_cut.py` from the repository root. While the script
-prints `UNPLUG_NOW`, physically remove board power during the active batch.
-Reconnect the same cable without resetting or reflashing. The script verifies
-USB disconnect, power-on reset reason, recovered strict state, and the next
-counter range. It cannot independently prove the exact flash-program interval;
-that field is reported `UNVERIFIED` without an external electrical probe.
+The runner formats only `avraw`, checks the reported board MAC, executes the
+module writes, performs one warm restart and checks recovered state. Results
+for the tested COM19 and COM33 boards are saved beside this README. This does
+not test a physical power cut. The exact instant of interruption during flash
+programming remains `UNVERIFIED` without external instrumentation.
+
+Other focused runners are in `tests/`. They validate the MAC before issuing
+commands. Physical power-cut testing requires a person to disconnect power at
+the prompted time; it is separate from warm-reset campaigns.

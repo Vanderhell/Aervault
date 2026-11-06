@@ -1,0 +1,21 @@
+include(FetchContent)
+set(AV_MICROFLASH_SOURCE_DIR "" CACHE PATH "Existing pinned microflash source checkout")
+if(DEFINED ENV{AV_MICROFLASH_SOURCE_DIR})
+    set(AV_MICROFLASH_SOURCE_DIR "$ENV{AV_MICROFLASH_SOURCE_DIR}")
+endif()
+if(AV_MICROFLASH_SOURCE_DIR)
+    set(_av_microflash_src "${AV_MICROFLASH_SOURCE_DIR}")
+else()
+    FetchContent_Declare(av_microflash_src
+        GIT_REPOSITORY https://github.com/Vanderhell/microflash.git
+        GIT_TAG 7730387307451db9c86c42e9681263f135949cce)
+    FetchContent_GetProperties(av_microflash_src)
+    if(NOT av_microflash_src_POPULATED)
+        FetchContent_Populate(av_microflash_src)
+    endif()
+    set(_av_microflash_src "${av_microflash_src_SOURCE_DIR}")
+endif()
+file(TO_CMAKE_PATH "${_av_microflash_src}" _av_microflash_src_norm)
+idf_component_register(SRCS "${_av_microflash_src_norm}/src/mflash.c"
+                       INCLUDE_DIRS "${_av_microflash_src_norm}/include")
+target_compile_features(${COMPONENT_LIB} PUBLIC c_std_99)

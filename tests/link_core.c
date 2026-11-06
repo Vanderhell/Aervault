@@ -1,10 +1,7 @@
 #include "aervault.h"
 int main(void)
 {
-    (void)&av_open;
-    (void)&av_provision_id;
-    (void)&av_put;
-    (void)&av_get;
-    (void)&av_load; /* legacy API remains linkable */
-    return 0;
+    av_context context;
+    (void)av_open(&context, 0);
+    return av_put(&context, 1, 0, 0, 0) == AV_OK;
 }

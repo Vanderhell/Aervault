@@ -1,0 +1,46 @@
+﻿[
+    {
+        "variant":  "core",
+        "elf":  "build-crypto-size-v4/core/aervault_crypto_footprint.elf",
+        "text_bytes":  139449,
+        "data_bytes":  42684,
+        "bss_bytes":  371133,
+        "flash_bytes":  182133,
+        "static_ram_bytes":  413817,
+        "flash_delta":  0,
+        "static_ram_delta":  0
+    },
+    {
+        "variant":  "auth",
+        "elf":  "build-crypto-size-v4/auth/aervault_crypto_footprint.elf",
+        "text_bytes":  141521,
+        "data_bytes":  42940,
+        "bss_bytes":  371149,
+        "flash_bytes":  184461,
+        "static_ram_bytes":  414089,
+        "flash_delta":  2328,
+        "static_ram_delta":  272
+    },
+    {
+        "variant":  "seal",
+        "elf":  "build-crypto-size-v4/seal/aervault_crypto_footprint.elf",
+        "text_bytes":  142449,
+        "data_bytes":  42956,
+        "bss_bytes":  371149,
+        "flash_bytes":  185405,
+        "static_ram_bytes":  414105,
+        "flash_delta":  3272,
+        "static_ram_delta":  288
+    },
+    {
+        "variant":  "pair",
+        "elf":  "build-crypto-size-v4/pair/aervault_crypto_footprint.elf",
+        "text_bytes":  144125,
+        "data_bytes":  43196,
+        "bss_bytes":  371133,
+        "flash_bytes":  187321,
+        "static_ram_bytes":  414329,
+        "flash_delta":  5188,
+        "static_ram_delta":  512
+    }
+]
